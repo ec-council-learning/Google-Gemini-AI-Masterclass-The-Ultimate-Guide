@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Car Recommendation Chat</title>
+    <link rel="stylesheet" type="text/css" href="static/styles.css">
+</head>
+<body>
+    <h1>Car Recommendation Chat</h1>
+    <div>
+        <input type="text" id="userInput" placeholder="Ask about cars...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    <div id="chatBox"></div>
+
+    <script>
+        async function sendMessage() {
+            let message = document.getElementById("userInput").value;
+            let response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message }),
+            });
+
+            if (response.ok) {
+                let data = await response.json();
+                let chatBox = document.getElementById("chatBox");
+                chatBox.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+                chatBox.innerHTML += `<p><strong>Bot:</strong> ${data.response}</p>`;
+            } else {
+                console.error("Error in sending message");
+            }
+        }
+    </script>
+</body>
+</html>
